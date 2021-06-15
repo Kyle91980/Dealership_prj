@@ -23,53 +23,38 @@ public class Dealership {
 				SalesPerson staff[] = new SalesPerson[STAFF_SIZE];
 				//instatiate array;
 				
-				staff[0] = new SalesPerson();
-				staff[0].salesID = 100;
-				staff[0].name = "Mahatma Ghandi";
-				staff[0].commision = 0.15f;
 				
-				staff[1] = new SalesPerson();
-				staff[1].salesID = 200;
-				staff[1].name = "Mother Theresa";
-				staff[1].commision = 0.20f;
+				for(int i = 0; i < STAFF_SIZE; i++) //Instatiate each salesPerson object
+				{
+					staff[i] = new SalesPerson();
+				}
 				
-				staff[2] = new SalesPerson();
-				staff[2].salesID = 300;
-				staff[2].name = "Mrs. Biden";
-				staff[2].commision = 0.10f;
+				staff[0] = new SalesPerson("Mahatma Handi", 100, 0.15f);
+				staff[1] = new SalesPerson("Mother Theresa" , 200, 0.20f);
+				staff[2] = new SalesPerson("Mrs. Biden" , 300, 0.10f);
+				
+				
+				//getter for Staff
+				int tempsid = staff[0].getSalesID();
 				
 				//Customer Variables
-				Customer client = new Customer();
-				client.custName = "Joe Biden";
+				Customer client = new Customer("Joe Biden");
+				
 				
 				//Vehicle variables
 				final int FLEET_SIZE = 3;
 				Vehicle fleet[ ] = new Vehicle[FLEET_SIZE];
 				
+				for(int i = 0; i < FLEET_SIZE; i++) //Instantiate each Vehicle object
+				{
+					fleet[i] = new Vehicle();
+				}
 				
-				fleet[0] = new Vehicle();
-				fleet[0].vinNum = 11111;
-				fleet[0].color = "Blue";
-				fleet[0].make = "Porche";
-				fleet[0].model ="Cayman"; 
-				fleet[0].year = 2020;
-				fleet[0].price = 75000f;
+				fleet[0] = new Vehicle("Blue", "Cayman", "Porche", 2021, 75000f, 0.0f, false, 11111);
+								
+				fleet[1] = new Vehicle("White", "F-Pace", "Jaguar", 2021, 49999f, 10.0f, false, 22222);
 				
-				fleet[1] = new Vehicle();
-				fleet[1].vinNum = 22222;
-				fleet[1].color = "White";
-				fleet[1].make = "Jaguar";
-				fleet[1].model ="F-Pace"; 
-				fleet[1].year = 2020;
-				fleet[1].price = 49995f;
-				
-				fleet[2] = new Vehicle();
-				fleet[2].vinNum = 333333;
-				fleet[2].color = "Red";
-				fleet[2].make = "Ford";
-				fleet[2].model ="Mustang"; 
-				fleet[2].year = 2020;
-				fleet[2].price = 50000f;
+				fleet[2] = new Vehicle("Red", "Mustang", "Ford", 2021, 50000f, 0.0f, false, 33333);
 				
 
 				// Working Variables
@@ -90,7 +75,7 @@ public class Dealership {
 					for(int i = 0; i < STAFF_SIZE; i++)
 					{
 						//System.out.println(staff[i].salesID);     // -- //USED FOR DEBUG
-						if (enteredSalesId ==  staff[i].salesID) 
+						if (enteredSalesId ==  staff[i].getSalesID()) 
 						{
 							validLogin = true; 
 							selSalesId = i;
@@ -115,7 +100,7 @@ public class Dealership {
 					System.exit(100);
 				}
 				
-				System.out.println("Hello! " + staff[selSalesId].name + " will be your car salesman for today."
+				System.out.println("Hello! " + staff[selSalesId].getName() + " will be your car salesman for today."
 												+ "\nPlease take a look at our car inventory below.");
 				
 				//Spacing for Menu options
@@ -127,7 +112,7 @@ public class Dealership {
 				
 				for(int i = 0; i < FLEET_SIZE; i ++ ) {
 					System.out.print( i + 1 + ". "); //Prints the car value.
-					System.out.println( fleet[i].year +" " + fleet[i].color +" " + fleet[i].make +" " + fleet[i].model +" for $" + fleet[i].price);
+					System.out.println( fleet[i].getYear() +" " + fleet[i].getColor() +" " + fleet[i].getMake() +" " + fleet[i].getModel() +" for $" + fleet[i].getPrice());
 				}
 				
 				//Validate Choice
@@ -157,11 +142,11 @@ public class Dealership {
 				//Purchase section
 				System.out.print("----------------------------------------------------\n");
 				 {
-					totalprice =  ( fleet[wantCar-1].price * SALESTAX ) + fleet[wantCar -1].price;
-					commEarned = totalprice * staff[0].commision; 
-					System.out.println("Thank you for your purchase " + client.custName + "." );
+					totalprice =  ( fleet[wantCar-1].getPrice() * SALESTAX ) + fleet[wantCar -1].getPrice();
+					commEarned = totalprice * staff[0].getCommision(); 
+					System.out.println("Thank you for your purchase " + client.getCustName() + "." );
 					System.out.println("The total price is:  $" + totalprice + "." );
-					System.out.println(staff[selSalesId].name + " earned $"+ commEarned + "." );
+					System.out.println(staff[selSalesId].getName() + " earned $"+ commEarned + "." );
 				}
 				
 				
