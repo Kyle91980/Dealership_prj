@@ -18,12 +18,12 @@ public class Vehicle {
 			this.year = 0;
 			this.price = 0.0f;
 			this.mileage = 0.0f;
-			this.hybrid = false;
+			
 			this.vinNum = 0;
 		}
 		
 		
-		public Vehicle(String color, String model, String make, int year, float price, float mileage, boolean hybrid,
+		public Vehicle(String color, String model, String make, int year, float price, float mileage,
 				int vinNum) {
 			super();
 			this.color = color;
@@ -32,7 +32,7 @@ public class Vehicle {
 			this.year = year;
 			this.price = price;
 			this.mileage = mileage;
-			this.hybrid = hybrid;
+			
 			this.vinNum = vinNum;
 		}
 
