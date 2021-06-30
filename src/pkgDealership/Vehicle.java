@@ -8,7 +8,7 @@ public class Vehicle {
 		private int year;
 		private float price;
 		private float mileage;
-		private Boolean hybrid;
+		//private Boolean hybrid;
 		private int vinNum;
 		
 		public Vehicle() {
@@ -73,12 +73,7 @@ public class Vehicle {
 		public void setMileage(float mileage) {
 			this.mileage = mileage;
 		}
-		public Boolean getHybrid() {
-			return hybrid;
-		}
-		public void setHybrid(Boolean hybrid) {
-			this.hybrid = hybrid;
-		}
+	
 		public int getVinNum() {
 			return vinNum;
 		}

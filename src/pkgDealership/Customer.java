@@ -7,7 +7,7 @@ public class Customer {
 		
 		public Customer() {
 			this.custName = "";
-			this.setCustid(0);
+			//this.setCustid(0);
 		}
 		
 		

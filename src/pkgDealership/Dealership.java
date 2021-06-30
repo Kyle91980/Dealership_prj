@@ -11,6 +11,7 @@ package pkgDealership;
 import java.util.*;
 import java.text.*;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.io.*;
 
 
@@ -40,14 +41,22 @@ public class Dealership {
 				
 				keyboard = new Scanner(System.in);
 				dealerShipName = "Kyle's Cars";
-				client = new Customer(001,"Joe Biden");
+				
 				sales = new ArrayList<Transaction>();
 				totalsales = 0;
 				totalcomm = 0;
 				totalcars = 0;
-			}
+	}
 
+	/****************************End of Constructor*************************************************/
 	
+	/******************************Load in Customer *************************************************/
+	
+	void loadCustomer() {
+		client = new Customer(123, "Joe Biden");
+	}
+	
+	/**********************************End load Customer ***********************************************/
 	
 	/**************************************LOAD SALES PEOPLE METHOD *********************************/
 	
@@ -58,7 +67,7 @@ public class Dealership {
 		Scanner sReader = new Scanner(sfile);
 		
 		//create the variables for the file
-		int i = 0;
+		int i = 0; //index for the array
 		int salesid = 0;
 		String salesname = "";
 		float commrate = 0f;
@@ -66,7 +75,8 @@ public class Dealership {
 		String eachLine = "";
 		StringTokenizer st;
 		
-		while(sReader.hasNextLine()) {
+		while(sReader.hasNextLine()) {		//Tests for EOF
+			
 			eachLine = sReader.nextLine();
 			st = new StringTokenizer(eachLine, ",");
 			while (st.hasMoreTokens())
@@ -85,28 +95,15 @@ public class Dealership {
 		sReader.close();
 		
 		System.out.println("Staff Loaded");
-		
-		//BUG FIX THE FOR LOOP  OR DELETE IT.
-		
-		/*for(int i = 0; i < STAFF_SIZE; i++) //Instatiate each salesPerson object
-			{
-					staff[i] = new SalesPerson();
-			}
-				
-				staff[0] = new SalesPerson("Mahatma Handi", 100, 0.15f);
-				staff[1] = new SalesPerson("Mother Theresa" , 200, 0.20f);
-				staff[2] = new SalesPerson("Mrs. Biden" , 300, 0.10f);
-			}
-			*/
-	/**************************************ENF OF LOAD SALES PEOPLE METHOD ***********************************/
-	/**************************************LOAD CUSTOMERS METHOD ********************************************/
-	void loadCustomers() {
-		client = new Customer(001,"Joe Biden");
 	}
-	/**************************************ENF OF LOAD CUSTOMERS METHOD ************************************/
+		
+		
+	/**************************************ENF OF LOAD SALES PEOPLE METHOD ***********************************/
+	
+	//Repeat similar processed for Loading in the Vehicles
 	
 	/**************************************LOAD VEHICLES METHOD *********************************************/
-	void loadVehicles(Vehicle[] fleet, int FLEET_SIZE) {
+	void loadVehicles(Vehicle[] fleet, int FLEET_SIZE) throws IOException {
 		
 		FileReader vfile = new FileReader("salespeople.dat");
 		Scanner vReader = new Scanner(vfile);
@@ -125,8 +122,8 @@ public class Dealership {
 		String eachLine = "";
 		StringTokenizer st;
 		
-		while(vReader.hasNextLine()) {
-			//tests for eof
+		while(vReader.hasNextLine()) {		//tests for eof
+			
 			eachLine = vReader.nextLine();
 			st = new StringTokenizer(eachLine, ",");
 			while (st.hasMoreTokens())
@@ -139,8 +136,9 @@ public class Dealership {
 				color = st.nextToken();
 				price = Float.parseFloat(st.nextToken());
 				miles = Float.parseFloat(st.nextToken());
+				year = Integer.parseInt(st.nextToken());
 				
-				
+				//Add the car to the array
 				fleet[i] = new Vehicle(color, model, make, year, price, miles, vin );
 				i++;
 			} //end of reading line
@@ -150,28 +148,20 @@ public class Dealership {
 		
 		System.out.println("Staff Loaded");
 	}
-		/*for(int i = 0; i < FLEET_SIZE; i++) //Instantiate each Vehicle object
-		{
-			fleet[i] = new Vehicle();
-		}
 		
-		fleet[0] = new Vehicle("Blue", "Cayman", "Porche", 2021, 75000f, 0.0f, false, 11111);
-						
-		fleet[1] = new Vehicle("White", "F-Pace", "Jaguar", 2021, 49999f, 10.0f, false, 22222);
-		
-		fleet[2] = new Vehicle("Red", "Mustang", "Ford", 2021, 50000f, 0.0f, false, 33333);
-		
-		*/
-	}
+	
 	/**************************************END OFLOAD VEHICLES METHOD *****************************************/
 	
 	/**************************************LOGIN METHOD *******************************************************/
-	int login(String dealerName, SalesPerson[] staff, int STAFF_SIZE) {
+	int login(SalesPerson[] staff, int STAFF_SIZE) {
 		
 		boolean validLogin = false;
-		Scanner keyboard = new Scanner(System.in);
+		
 		int selSalesId = 0, enteredSalesId = 0, attempts = 0;
-		boolean  validateChoice = false;
+		
+		System.out.println("Welcome to " + dealerShipName);
+		
+		//validate the login is correct
 		do { 
 			
 			System.out.print("Enter Sales ID: "); 
@@ -184,25 +174,27 @@ public class Dealership {
 				{
 					validLogin = true; 
 					selSalesId = i;
-					break;
+					
 				}
 			}
 			//System.out.println(staff[selSalesId].name);   // -- //USED FOR DEBUG
-			if (validLogin == false)
+			if (!validLogin)
 				{
 					System.out.println("Invalid Login");
 					attempts++;
 				}
 				
 			
-		}while (attempts < 3 && !validLogin);
+		} while (attempts < 3 && !validLogin);
 		
 		
 		//sales ID = 001, 002, 003 for each name
-		if (validateChoice)
+		if (!validLogin)
 		{
 			System.out.println("Number of attempts exceeded, program terminated!");
 			System.exit(100);
+		} else {
+			System.out.println("Loggin in Successful: " + staff[selSalesId].getName());
 		}
 		
 		return selSalesId;
@@ -210,10 +202,12 @@ public class Dealership {
 	
 	/**************************************DISPLAY VEHICLES METHOD******************************************************/
 	void displayVehicles(Vehicle[] fleet, int FLEET_SIZE){
+		
+		
 		System.out.println("We have the following cars: \n");
 		
 		for(int i = 0; i < FLEET_SIZE; i ++ ) {
-			System.out.print( i + 1 + ". "); //Prints the car value.
+			System.out.print( (i + 1) + ". "); //Prints the car value.
 			System.out.println( fleet[i].getYear() +" " + fleet[i].getColor() +" " + fleet[i].getMake() +" " 
 			+ fleet[i].getModel() +" for $" + fleet[i].getPrice());
 		}
@@ -221,45 +215,90 @@ public class Dealership {
 	/**************************************END OF DISPLAY VEHICLES METHOD******************************************************/
 
 	/**************************************PROCESS SALE METHOD******************************************************/
-	void processSale(Vehicle[] fleet, int FLEET_SIZE, SalesPerson selStaff, Customer selCust) {
-		int wantCar = 0;
-		Scanner keyboard = new Scanner(System.in);
-		float totalprice = 0f, commEarned = 0f;
-		int attempts = 0;
-		boolean  validateChoice = false;
-		final float SALESTAX = 0.0875f;
-
-		do {
-			
-			System.out.print("\nWhich car would you like to purchase?:    ");
-			wantCar = keyboard.nextInt();
-			
-				if ( wantCar < 1 ||  wantCar > FLEET_SIZE) {
-					System.out.print("Invalid choice");
-					attempts++;
-				}
-				else {
-					validateChoice = true;
-				}
-				
-		} while ( attempts < 3 && !validateChoice);
+	void processSale(Vehicle[] fleet, int FLEET_SIZE, SalesPerson selStaff) {
 		
-		if (!validateChoice)
+		
+		float commEarned = 0f, totalprice = 0f;
+		String choice = "";
+		int wantCar = 0,  attempts = 0;
+		final float SALESTAX = 0.0875f;
+		boolean validChoice = false;
+		LocalDateTime  currentdt = LocalDateTime.now(); // Create a date time object
+		String salesdate = currentdt.toString(); //convert to a string
+
+		do
 		{
-			System.out.println("\nNumber of attempts exceeded, program terminated!");
-			System.exit(100);
-		}
-		System.out.print("----------------------------------------------------\n");
-		 {
-			totalprice =  ( fleet[wantCar-1].getPrice() * SALESTAX ) + fleet[wantCar -1].getPrice();
-			commEarned = totalprice * selStaff.getCommision(); 
-			System.out.println("Thank you for your purchase " + selCust.getCustName() + "." );
-			System.out.println("The total price is:  $" + totalprice + "." );
-			System.out.println(selStaff.getName() + " earned $"+ commEarned + "." );
-		}
-		 
-		 keyboard.close(); //close Scanner class
+			System.out.print("Which car would you like to purchase?: ");
+			choice = keyboard.next();
+			wantCar = Integer.parseInt(choice);
+			if (wantCar < 1 || wantCar > FLEET_SIZE)
+			{		System.out.println("Invalid Choice!");
+					attempts++;
+			}
+			else 
+			{
+				validChoice = true;
+			}
+		} while (attempts < 3 && !validChoice);
+
+			if (!validChoice) 
+			{
+				System.out.println("Number of attempts exceeded, program terminated!");
+				System.exit(100); // 100 = attempts exceeded
+			}
+			
+			//Calculate Price & Commission
+
+			totalprice = (fleet[wantCar-1].getPrice() * SALESTAX) + fleet[wantCar-1].getPrice();
+			commEarned = totalprice * selStaff.getCommision();
+			System.out.println("Thank you for your purchase " + client.getCustName() +".");
+			System.out.printf("The total price with tax is $ %.2f.\n", totalprice);
+			System.out.printf(selStaff.getName()+" earned $ %.2f.\n", commEarned);
+
+			//Update total sales
+			totalsales += totalprice;
+			totalcomm += commEarned;
+			totalcars++;
+			
+			//add to the arraylist
+			 sales.add(new Transaction(fleet[wantCar-1].getVinNum(), selStaff.getSalesID(), client.getCustid(),
+					 totalprice, salesdate));
 	}
+	/**************************************Display Sales Method ******************************************************/
+	
+	void displaySales() {
+		LocalDateTime dt = LocalDateTime.now();
+		DateTimeFormatter mdy = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+		String todaysdate = dt.format(mdy);
+		
+		//Display sales
+			System.out.println("\n**********************************************************");
+			System.out.println( dealerShipName  + "Sales For " + todaysdate);
+			System.out.println("Cars Sold: " + totalcars);
+			System.out.printf("Total Sales: $%.2f \n", totalsales);
+			System.out.printf("Total Commission Paid:  $%.2f \n", totalcomm);
+			System.out.println("*****************************************************\n");
+	}
+	
+	/***********************************End of display Method *******************************************************/
+	
+	/*****************************************Write Sales Method *****************************************************/
+	
+	void writeSales() throws IOException {
+		
+		FileWriter salesWriter = new FileWriter("sales.dat", true); //Opens the file for appending
+		
+		for (int i = 0; i < totalcars; i ++) {
+			salesWriter.write(sales.get(i).getVin() + ". " +
+											sales.get(i).getSalesid() + ", " +
+											sales.get(i).getCustid() + "," +
+											sales.get(i).getTotalprice() + "," +
+											sales.get(i).getSalesdate() + "\n");
+		}
+		salesWriter.close();
+			System.out.println("Sales File Written!");
+	}
+	/**************************************End of Write Sales MEthod **********************************************************/
 	
 }// END OF DEALERSHIP CLASS
 
